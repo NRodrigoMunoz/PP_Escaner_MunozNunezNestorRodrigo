@@ -20,7 +20,7 @@ namespace Entidades
             MostrarDocumentosPorEstado(e, Documento.Paso.EnEscaner, out extension, out cantidad, out resumen);
         }
 
-        public static void MostrarEnRevisión(Escaner e, out int extension, out int cantidad, out string resumen)
+        public static void MostrarEnRevision(Escaner e, out int extension, out int cantidad, out string resumen)
         {
             MostrarDocumentosPorEstado(e, Documento.Paso.EnRevision, out extension, out cantidad, out resumen);
         }
@@ -45,7 +45,6 @@ namespace Entidades
             extension = 0;
             cantidad = 0;
             resumen = "";
-            bool bandera = false;
             foreach (Documento item in e.ListaDocumentos)
             {
                 if (item.Estado == estado)
@@ -55,7 +54,7 @@ namespace Entidades
                         Mapa mapa = (Mapa)item;
                         extension = extension + mapa.Superficie;
                         cantidad++;
-                        bandera = true;
+                        resumen += mapa.ToString();
 
                     }
                     else
@@ -63,19 +62,10 @@ namespace Entidades
                         Libro libro = (Libro)item;
                         extension = extension + libro.NumPaginas;
                         cantidad++;
-                        bandera = false;
+                        resumen += libro.ToString();
                     }
 
                 }
-            }
-            if (bandera == true)
-            {
-                resumen = $"El total de Cm2 de los mapas es: {extension}Cm2 y el número total de ítems únicos procesados: {cantidad}";
-            }
-            else
-            {
-                resumen = $"El total de páginas es: {extension} y el número total de ítems únicos procesados: {cantidad}";
-
             }
         }
 
