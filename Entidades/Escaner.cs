@@ -21,12 +21,6 @@ namespace Entidades
         public string Marca { get => marca;}
         public TipoDoc Tipo { get => tipo;}
 
-        /// <summary>
-        /// Constructor en el que se instancia la lista y segun el tipo de Documento sea Libro o Mapa se le asigna una locación
-        /// procesosTecnicos en caso de libros, mapoteca en caso de mapas y nulo si no se pasa su tipo de documento.
-        /// </summary>
-        /// <param name="marca">La marca del escaner ejemplo Samsung,HP,Epson,etc</param>
-        /// <param name="tipo">Tipo de documento mapa o libro.</param>
         public Escaner(string marca,TipoDoc tipo)
         {
             listaDocumentos = new List<Documento>();
@@ -46,13 +40,6 @@ namespace Entidades
             }
         }
 
-        
-        /// <summary>
-        /// Agrega el documento a la lista según su localización y su tipo ademas los avanza de estado.
-        /// </summary>
-        /// <param name="e">Se utiliza para poder acceder a la lista para agregar el documento.</param>
-        /// <param name="d">Se le pasa por parametro un tipo de documento puede ser Mapa o Libro.</param>
-        /// <returns></returns>
         public static bool operator +(Escaner e,Documento d)
         {
             if (e != d && d.Estado == Documento.Paso.Inicio)
@@ -75,12 +62,6 @@ namespace Entidades
             return false;
         }
         
-        /// <summary>
-        /// Compara si los documentos son iguales dentro de una lista.
-        /// </summary>
-        /// <param name="e">Se utiliza para acceder a la lista y poder comparar los documentos.</param>
-        /// <param name="d">Es el documento a comparar con los demas que esten en la lista.</param>
-        /// <returns></returns>
         public static bool operator ==(Escaner e,Documento d)
         {
             
@@ -98,7 +79,6 @@ namespace Entidades
                         if ((d is Mapa && (Mapa)d == (Mapa)item) ||
                         (d is Libro && (Libro)d == (Libro)item))
                         {
-
                             return true;
                         }
                     }
@@ -117,11 +97,6 @@ namespace Entidades
             return !(e == d);
         }
 
-        /// <summary>
-        /// Busca dentro de la lista el documento brindado por parametro y avanza su estado.
-        /// </summary>
-        /// <param name="d">Es el documento al cual se le quiere avanzar su estado.</param>
-        /// <returns></returns>
         public bool CambiarEstadoDocumento(Documento d)
         {
             if (listaDocumentos.Contains(d))
@@ -132,7 +107,6 @@ namespace Entidades
             return false;
         }
 
-        //La locacion que se le asigna en el constructor dependiendo de su tipo.
         public enum Departamento
         {
             nulo,

@@ -20,17 +20,6 @@ namespace Entidades
         protected string NumNormalizado { get => numNormalizado;}
         public string Titulo { get => titulo;}
 
-
-        /// <summary>
-        /// Constructor de la clase padre documento para completar los atributos de sus clases hijas Mapa/Libro
-        /// esta misma no se puede instanciar por ser abstracta y tanto como Mapa o libro que se instancie tendra por defecto
-        /// su estado en Inicio.
-        /// </summary>
-        /// <param name="titulo"></param>
-        /// <param name="autor"></param>
-        /// <param name="anio"></param>
-        /// <param name="numNormalizado"></param>
-        /// <param name="barcode"></param>
         public Documento(string titulo,string autor,int anio,string numNormalizado,string barcode)
         {
             this.titulo = titulo;
@@ -40,39 +29,33 @@ namespace Entidades
             this.numNormalizado = numNormalizado;
             this.estado = Paso.Inicio;
         }
-        
-        /// <summary>
-        /// Se utiliza para brindar la informacion de Libro y Mapa.
-        /// </summary>
-        /// <returns></returns>
-        public override abstract string ToString();
-        
-        /// <summary>
-        /// Metodo para avanzar los estados de los documentos (Libro / Mapa)
-        /// </summary>
-        /// <returns></returns>
-        public bool AvanzarEstado()
+
+        public override string ToString()
         {
-            if (this.estado == Paso.Inicio)
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine($"Autor: {this.Autor}");
+            sb.AppendLine($"Año: {this.Anio}");
+            if (NumNormalizado.Length > 1 ) 
             {
-                this.estado = Paso.Distruibuido;
+                    sb.AppendLine($"ISBN: {this.NumNormalizado}");
             }
-            else if (this.estado == Paso.Distruibuido)
-            {
-                this.estado = Paso.EnEscaner;
-            }
-            else if (this.estado == Paso.EnEscaner)
-            {
-                this.estado = Paso.EnRevision;
-            }
-            else if (this.estado == Paso.EnRevision)
-            {
-                this.estado = Paso.Terminado;
-            }
-            return true;
+            sb.AppendLine($"Cód de barras: {this.Barcode}");
+            return sb.ToString();
         }
 
-        //Un enumerado del estado de los documentos.
+        public bool AvanzarEstado()
+        {
+            if(this.estado == Paso.Terminado)
+            {
+                return false;
+            }
+            else
+            {
+                this.estado++;
+                return true;
+            }
+        }
+
         public enum Paso
         {
             Inicio,
@@ -81,6 +64,5 @@ namespace Entidades
             EnRevision,
             Terminado
         }
-
     }
 }
