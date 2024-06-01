@@ -30,21 +30,35 @@ namespace Test
 
             //ESCANERS
             Escaner l = new Escaner("HP", Escaner.TipoDoc.libro);
-            Escaner m = new Escaner("HP", Escaner.TipoDoc.mapa);
+           Escaner m = new Escaner("HP", Escaner.TipoDoc.mapa);
+            try
+            {
+                bool pudo = l + l1;
+                pudo = l + l2;
+                //pudo = l + l3;
+                //pudo = l + l4;
+                //pudo = l + l5;
+                pudo = m + m1;
+                pudo = m + m2;
+                pudo = m + m3;
+                pudo = m + m4;
+                //pudo = m + m5;
+                //pudo = m + m6;
+                pudo = m + l1;
+                //pudo = l + m1;
+            }
+            catch (TipoIncorrectoException ex)
+            {
 
-            bool pudo = l + l1;
-            pudo = l + l2;
-            pudo = l + l3;
-            pudo = l + l4;
-            pudo = l + l5;
-            pudo = m + m1;
-            pudo = m + m2;
-            pudo = m + m3;
-            pudo = m + m4;
-            pudo = m + m5;
-            pudo = m + m6;
-            pudo = m + l1;
-            pudo = l + m1;
+                Console.WriteLine(ex.ToString());
+
+                if (ex.InnerException != null && ex.ToString() != ex.InnerException.ToString())
+                {
+                    Console.WriteLine(ex.InnerException.ToString());
+                }
+            }
+
+
 
             l1.AvanzarEstado();
             l1.AvanzarEstado();

@@ -14,14 +14,14 @@ namespace Entidades
         Departamento locacion;
         string marca;
         TipoDoc tipo;
-        
-        //Propiedades
-        public List<Documento> ListaDocumentos { get => listaDocumentos;}
-        public Departamento Locacion { get => locacion;}
-        public string Marca { get => marca;}
-        public TipoDoc Tipo { get => tipo;}
 
-        public Escaner(string marca,TipoDoc tipo)
+        //Propiedades
+        public List<Documento> ListaDocumentos { get => listaDocumentos; }
+        public Departamento Locacion { get => locacion; }
+        public string Marca { get => marca; }
+        public TipoDoc Tipo { get => tipo; }
+
+        public Escaner(string marca, TipoDoc tipo)
         {
             listaDocumentos = new List<Documento>();
             this.marca = marca;
@@ -30,7 +30,7 @@ namespace Entidades
             {
                 this.locacion = Departamento.procesosTecnicos;
             }
-            else if(tipo == TipoDoc.mapa)
+            else if (tipo == TipoDoc.mapa)
             {
                 this.locacion = Departamento.mapoteca;
             }
@@ -40,35 +40,42 @@ namespace Entidades
             }
         }
 
-        public static bool operator +(Escaner e,Documento d)
+        public static bool operator +(Escaner e, Documento d)
         {
-            if (e != d && d.Estado == Documento.Paso.Inicio)
+            try
             {
-                if (e.Locacion == Departamento.procesosTecnicos && d.GetType() == typeof(Libro))
+                if (e != d && d.Estado == Documento.Paso.Inicio)
                 {
-                    d.AvanzarEstado();
-                    e.ListaDocumentos.Add(d);
-                    return true;
+                    if (e.Locacion == Departamento.procesosTecnicos && d.GetType() == typeof(Libro))
+                    {
+                        d.AvanzarEstado();
+                        e.ListaDocumentos.Add(d);
+                        return true;
 
+                    }
+                    else if (e.locacion == Departamento.mapoteca && d.GetType() == typeof(Mapa))
+                    {
+                        d.AvanzarEstado();
+                        e.ListaDocumentos.Add(d);
+                        return true;
+                    }
                 }
-                else if (e.locacion == Departamento.mapoteca && d.GetType() == typeof(Mapa))
-                {
-                    d.AvanzarEstado();
-                    e.ListaDocumentos.Add(d);
-                    return true;
-                }
-                
+                throw new TipoIncorrectoException("El documento no se pudo añadir a la lista", "Entidades", "sobrecarga de +");
             }
-            return false;
+            catch (TipoIncorrectoException ex)
+            {  
+                    throw new TipoIncorrectoException("El documento no se pudo añadir a la lista","Entidades","sobrecarga de +",ex);
+            }
+            
         }
-        
-        public static bool operator ==(Escaner e,Documento d)
+
+        public static bool operator ==(Escaner e, Documento d)
         {
             
             TipoDoc tipoDeDocumento = d is Libro ? TipoDoc.libro : TipoDoc.mapa;
             if (e.tipo == tipoDeDocumento)
             {
-                if (e.ListaDocumentos.Count() == 0)
+                if (e.listaDocumentos.Count == 0)
                 {
                     return false;
                 }
@@ -79,19 +86,14 @@ namespace Entidades
                         if ((d is Mapa && (Mapa)d == (Mapa)item) ||
                         (d is Libro && (Libro)d == (Libro)item))
                         {
-                            return true;
+                            throw new TipoIncorrectoException("Este escáner no acepta este tipo de documento", $"Entidades", "sobrecarga de ==");
                         }
-                    }
+                    }  
                 }
             }
-            else
-            {
-                return false;
-            }
             return false;
+           
         }
-
-
         public static bool operator !=(Escaner e,Documento d)
         {
             return !(e == d);
